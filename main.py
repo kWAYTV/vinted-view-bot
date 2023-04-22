@@ -1,8 +1,9 @@
 import threading, requests, os
 from itertools import cycle
+from datetime import datetime
 from colorama import Fore, Style
-from pystyle import Colors, Colorate, Center
 from fake_useragent import UserAgent
+from pystyle import Colors, Colorate, Center
 
 logo = """
 ██╗   ██╗██╗███╗   ██╗████████╗███████╗██████╗ 
@@ -50,8 +51,9 @@ class VintedViewer:
         self.session.proxies = {'http': f"http://{self.proxy}", 'https': f'http://{self.proxy}'}
 
     def safe_print(self, arg):
+        current_time = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
         with self.lock:
-            print(arg)
+            print(f"{current_time} • {arg}")
 
     def thread_starter(self):
         headers = {
@@ -62,11 +64,11 @@ class VintedViewer:
             if r.status_code == 200:
                 with self.lock:
                     self.ctr += 1
-                self.safe_print(f"{Style.DIM}OK - {Style.RESET_ALL}Views +1 (Total: {self.ctr})")
+                self.safe_print(f"{Style.DIM}OK • {Style.RESET_ALL}Sent: {self.ctr}")
             else:
-                self.safe_print(f"{Style.DIM}ERROR - {Style.RESET_ALL}Error: {r.status_code} for proxy {self.proxy}")
+                self.safe_print(f"{Style.DIM}ERROR • {Style.RESET_ALL}Error: {r.status_code} for proxy {self.proxy}")
         except requests.exceptions.RequestException as e:
-            self.safe_print(f"{Style.DIM}ERROR - {Style.RESET_ALL}Error: {e} for proxy {self.proxy}")
+            self.safe_print(f"{Style.DIM}ERROR • {Style.RESET_ALL}Error: {e} for proxy {self.proxy}")
 
     def run(self):
         while True:
@@ -83,8 +85,8 @@ def main():
     print(Center.XCenter(Colorate.Vertical(Colors.white_to_blue, "────────────────────────────────────────────\n", 1)))
     print(Center.XCenter(Colorate.Vertical(Colors.white_to_blue, "Starting...", 1)))
     check_files()
-    link = input(f"{Style.DIM}Input - {Style.RESET_ALL}Vinted link: ")
-    threads = int(input(f"{Style.DIM}Input - {Style.RESET_ALL}Threads: "))
+    link = input(f"{Style.DIM}Input • {Style.RESET_ALL}Vinted link: ")
+    threads = int(input(f"{Style.DIM}Input • {Style.RESET_ALL}Threads: "))
     viewer = VintedViewer(link, threads)
     viewer.run()
 
