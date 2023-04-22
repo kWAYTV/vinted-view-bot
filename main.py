@@ -16,6 +16,9 @@ logo = """
 # Clear the console.
 clear = lambda: os.system("cls" if os.name in ("nt", "dos") else "clear")
 
+# Set the console title.
+os.system(f"title Vinted View Bot - discord.gg/kws")
+
 def check_files():
     if not os.path.exists("proxies.txt"):
         with open("proxies.txt", "w") as f:
@@ -37,6 +40,7 @@ class VintedViewer:
         self.lock = threading.Lock()
         self.threads = threads
         self.ctr = 0
+        self.fails = 0
         self.session = requests.Session()
         self.proxy_pool = self.load_proxies()
         self.proxy = next(self.proxy_pool)
@@ -69,16 +73,19 @@ class VintedViewer:
                 self.safe_print(f"{Style.DIM}OK • {Style.RESET_ALL}Sent: {self.ctr}")
             else:
                 self.safe_print(f"{Style.DIM}ERROR • {Style.RESET_ALL}Error: {r.status_code} for proxy {self.proxy}")
+                with self.lock:
+                    self.fails += 1
         except requests.exceptions.RequestException as e:
             self.safe_print(f"{Style.DIM}ERROR • {Style.RESET_ALL}Error: {e} for proxy {self.proxy}")
+            with self.lock:
+                self.fails += 1
+        
+        os.system(f"title Vinted View Bot - discord.gg/kws • Sent: {self.ctr} • Fails: {self.fails} - Threads: {threading.active_count() - 1}")
 
     def run(self):
         while True:
             if threading.active_count() <= self.threads:
-                try:
-                    threading.Thread(target=self.thread_starter).start()
-                except:
-                    pass
+                threading.Thread(target=self.thread_starter).start()
             self.set_proxy()
 
 def main():
