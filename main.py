@@ -1,4 +1,4 @@
-import threading, requests, os
+import threading, requests, os, time
 from itertools import cycle
 from datetime import datetime
 from colorama import Fore, Style
@@ -22,11 +22,13 @@ def check_files():
             f.write("Put your proxies here. (user:pass@ip:port)")
         print(f"{Style.DIM}ERROR - {Style.RESET_ALL}You need to input proxies in proxies.txt")
         input(f"{Style.DIM}EXIT - {Style.RESET_ALL}Press enter to exit...")
+        time.sleep(1)
         exit()
 
     if os.stat("proxies.txt").st_size == 0:
         print(f"{Style.DIM}ERROR - {Style.RESET_ALL}You need to input proxies in proxies.txt")
         input(f"{Style.DIM}EXIT - {Style.RESET_ALL}Press enter to exit...")
+        time.sleep(1)
         exit()
 
 class VintedViewer:
@@ -91,4 +93,9 @@ def main():
     viewer.run()
 
 if __name__ == "__main__":
-    main()
+    try:
+        main()
+    except KeyboardInterrupt:
+        print(f"\n{Style.DIM}EXIT - {Style.RESET_ALL}Detected Ctrl + C, exiting...")
+        time.sleep(1)
+        exit()
