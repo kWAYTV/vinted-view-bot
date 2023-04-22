@@ -13,6 +13,7 @@ A simple, multi-threaded Python script to increase the view count of a Vinted it
 - Python 3.6+
 - `requests` module
 - `fake-useragent` module
+- Pretty UI
 
 ## Installation
 
