@@ -34,6 +34,10 @@ def check_files():
         time.sleep(1)
         exit()
 
+def get_time():
+    now = datetime.now()
+    return now.strftime('%Y-%m-%d %H:%M:%S')
+
 class VintedViewer:
     def __init__(self, link, threads):
         self.link = link
@@ -57,9 +61,9 @@ class VintedViewer:
         self.session.proxies = {'http': f"http://{self.proxy}", 'https': f'http://{self.proxy}'}
 
     def safe_print(self, arg):
-        current_time = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+        current_time = get_time()
         with self.lock:
-            print(f"{current_time} • {arg}")
+            print(f"{current_time} {Style.DIM} • {arg}")
 
     def thread_starter(self):
         headers = {
@@ -70,13 +74,13 @@ class VintedViewer:
             if r.status_code == 200:
                 with self.lock:
                     self.ctr += 1
-                self.safe_print(f"{Style.DIM}OK • {Style.RESET_ALL}Sent: {self.ctr}")
+                self.safe_print(f"OK • {Style.RESET_ALL}{Fore.WHITE}Sent: {self.ctr}")
             else:
-                self.safe_print(f"{Style.DIM}ERROR • {Style.RESET_ALL}Error: {r.status_code} for proxy {self.proxy}")
+                self.safe_print(f"ERROR • {Style.RESET_ALL}{Fore.WHITE}Error: {r.status_code} for proxy {self.proxy}")
                 with self.lock:
                     self.fails += 1
         except requests.exceptions.RequestException as e:
-            self.safe_print(f"{Style.DIM}ERROR • {Style.RESET_ALL}Error: {e} for proxy {self.proxy}")
+            self.safe_print(f"ERROR • {Style.RESET_ALL}{Fore.WHITE}Error: {e} for proxy {self.proxy}")
             with self.lock:
                 self.fails += 1
         
@@ -94,8 +98,9 @@ def main():
     print(Center.XCenter(Colorate.Vertical(Colors.white_to_blue, "────────────────────────────────────────────\n", 1)))
     print(Center.XCenter(Colorate.Vertical(Colors.white_to_blue, "Starting...", 1)))
     check_files()
-    link = input(f"{Style.DIM}Input • {Style.RESET_ALL}Vinted link: ")
-    threads = int(input(f"{Style.DIM}Input • {Style.RESET_ALL}Threads: "))
+    current_time = get_time()
+    link = input(f"{current_time} {Style.DIM}• Input • {Style.RESET_ALL}{Fore.WHITE}Vinted product link: ")
+    threads = int(input(f"{current_time} {Style.DIM}• Input • {Style.RESET_ALL}{Fore.WHITE}Desired threads (recommended: 10): "))
     viewer = VintedViewer(link, threads)
     viewer.run()
 
