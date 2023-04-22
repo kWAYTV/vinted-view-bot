@@ -18,15 +18,15 @@ A simple, multi-threaded Python script to increase the view count of a Vinted it
 
 1. Clone the repository or download the source code:
 
-\`\`\`bash
+```bash
 git clone https://github.com/kWAYTV/vinted-view-bot.git
-\`\`\`
+```
 
 2. Install the required packages:
 
-\`\`\`bash
+```bash
 pip install -r requirements.txt
-\`\`\`
+```
 
 3. Add your proxies to the `proxies.txt` file, one proxy per line. Use `user:pass@ip:port` format.
 
@@ -34,9 +34,9 @@ pip install -r requirements.txt
 
 1. Run the script:
 
-\`\`\`bash
+```bash
 python main.py
-\`\`\`
+```
 
 2. Enter the Vinted link and the number of threads when prompted.
 
